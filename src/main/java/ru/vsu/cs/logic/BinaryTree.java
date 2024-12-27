@@ -119,6 +119,21 @@ public class BinaryTree <T extends Comparable<T>> {
         return heir;
     }
 
+    public Node<T> findNode(T value) {
+        Node<T> current = root;
+        while (current.value.compareTo(value) != 0) {
+            if (value.compareTo(current.value) < 0) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+            if (current == null) {
+                return null;
+            }
+        }
+        return current;
+    }
+
     public List<T> inOrderTraversal() {
         List<T> result = new ArrayList<>();
         inOrderTraversal(root, result);
