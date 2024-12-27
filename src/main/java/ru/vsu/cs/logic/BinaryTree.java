@@ -1,7 +1,13 @@
 package ru.vsu.cs.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BinaryTree <T extends Comparable<T>> {
     private Node<T> root;
+    public BinaryTree() {
+        root = null;
+    }
     private static class Node<T> {
         T value;
         Node<T> right;
@@ -12,7 +18,7 @@ public class BinaryTree <T extends Comparable<T>> {
         }
     }
 
-    private void insert(T value) {
+    public void insert(T value) {
         Node<T> newNode = new Node<>(value);
         if (root == null) {
             root = newNode;
@@ -20,22 +26,28 @@ public class BinaryTree <T extends Comparable<T>> {
         }
 
         Node<T> current = root;
+        Node<T> parent;
         while (true) {
+            parent = current;
             if (value.compareTo(current.value) == 0) {
                 return;
             } else if (value.compareTo(current.value) < 0) {
                 current = current.left;
-            } else if (value.compareTo(current.value) > 0) {
+                if (current == null) {
+                    parent.left = newNode;
+                    return;
+                }
+            } else {
                 current = current.right;
-            }
-            if (current == null) {
-                current = newNode;
-                return;
+                if (current == null) {
+                    parent.right = newNode;
+                    return;
+                }
             }
         }
     }
 
-    private void delete(T value) {
+    public void delete(T value) {
         Node<T> current = root;
         Node<T> parent = root;
         boolean isLeft = true;
@@ -91,6 +103,36 @@ public class BinaryTree <T extends Comparable<T>> {
     }
 
     private Node<T> findHeir(Node<T> node) {
-        return node; //not ready yet..((
+        Node<T> parent = node;
+        Node<T> heir = node;
+        Node<T> current = node.right;
+        while (current != null) {
+            parent = heir;
+            heir = current;
+            current = current.left;
+        }
+        if (heir != node.right) {
+            parent.left = heir.right;
+            heir.right = node.right;
+        }
+        heir.left = node.left;
+        return heir;
+    }
+
+    public List<T> inOrderTraversal() {
+        List<T> result = new ArrayList<>();
+        inOrderTraversal(root, result);
+        return result;
+    }
+
+    private void inOrderTraversal(Node<T> node, List<T> result) {
+        if (node != null) {
+            inOrderTraversal(node.left, result);  // Рекурсивный вызов для левого поддерева
+            result.add(node.value);              // Добавление значения узла в результат
+            inOrderTraversal(node.right, result); // Рекурсивный вызов для правого поддерева
+        }
+    }
+    public void printRoot() {
+        System.out.println(root.value);
     }
 }
