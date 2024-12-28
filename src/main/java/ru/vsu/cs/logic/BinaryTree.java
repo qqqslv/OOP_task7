@@ -8,7 +8,7 @@ public class BinaryTree <T extends Comparable<T>> {
     public BinaryTree() {
         root = null;
     }
-    private static class Node<T> {
+    public static class Node<T> {
         T value;
         Node<T> right;
         Node<T> left;
@@ -147,6 +147,12 @@ public class BinaryTree <T extends Comparable<T>> {
             inOrderTraversal(node.right, result); // Рекурсивный вызов для правого поддерева
         }
     }
+    @Override
+    public String toString() {
+        List<T> elements = inOrderTraversal();
+        return elements.toString();
+    }
+
     public void printRoot() {
         System.out.println(root.value);
     }
